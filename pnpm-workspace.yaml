@@ -1,0 +1,9 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+  - "supabase"
+allowBuilds:
+  sharp: false
+  unrs-resolver: false
+  esbuild: true
+  supabase: true

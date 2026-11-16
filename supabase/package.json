@@ -1,0 +1,9 @@
+{
+  "name": "@lvp/database",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Migrations Supabase et tests de sécurité (RLS) exécutés sur un PostgreSQL embarqué.",
+  "scripts": { "test": "vitest run" },
+  "devDependencies": { "@electric-sql/pglite": "^0.5.16", "vitest": "^5" }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "le-vrai-prix",
+  "private": true,
+  "description": "Le vrai prix — monorepo (web, mobile, packages partagés, base de données)",
+  "scripts": {
+    "dev:web": "pnpm --filter @lvp/web dev",
+    "dev:mobile": "pnpm --filter @lvp/mobile start",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm -r lint",
+    "db:start": "supabase start",
+    "db:stop": "supabase stop",
+    "db:reset": "supabase db reset",
+    "db:status": "supabase status",
+    "test:integration": "sh supabase/run-integration.sh",
+    "db:moderator": "sh supabase/add-moderator.sh",
+    "dev:phone": "sh apps/mobile/start-phone.sh"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "supabase": "^3.1.0"
+  }
+}

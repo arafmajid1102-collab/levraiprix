@@ -1,0 +1,17 @@
+node_modules/
+.next/
+.expo/
+dist/
+out/
+coverage/
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+.DS_Store
+supabase/.temp/
+ios/
+android/
+
+# Réglages locaux de l'assistant (chemins propres à cette machine)
+.claude/

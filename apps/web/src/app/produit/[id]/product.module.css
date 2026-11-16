@@ -1,0 +1,229 @@
+.head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  gap: var(--space-xxl);
+  align-items: start;
+}
+
+.headText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.headText h1 {
+  font-size: var(--font-size-display);
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-lg) var(--space-xxl);
+}
+
+.facts dt {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-subtle);
+}
+
+.facts dd {
+  font-weight: 500;
+}
+
+.best {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-xl);
+  background:
+    radial-gradient(120% 90% at 100% 0%, var(--color-accent-soft), transparent 60%), var(--color-surface);
+}
+
+.bestPrice {
+  font-size: var(--font-size-hero);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--color-highlight);
+}
+
+.bestPrice small {
+  font-family: var(--font-text), system-ui, sans-serif;
+  font-size: var(--font-size-body);
+  letter-spacing: 0;
+  color: var(--color-text-subtle);
+}
+
+.offers {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.offer {
+  display: flex;
+  gap: var(--space-lg);
+  padding: var(--space-xl);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.offer[data-best] {
+  border-color: color-mix(in srgb, var(--color-good) 45%, transparent);
+}
+
+.rank {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-bg-sunken);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-small);
+}
+
+.offer[data-best] .rank {
+  background: var(--color-good-soft);
+  color: var(--color-good);
+}
+
+.offerMain {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.offerTop {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-lg);
+}
+
+.offerTop h3 {
+  font-size: var(--font-size-body-large);
+}
+
+.offerMeta {
+  font-size: var(--font-size-small);
+  color: var(--color-text-subtle);
+}
+
+.offerPrice {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.offerUnit {
+  font-size: var(--font-size-title);
+  font-weight: 500;
+}
+
+.struck {
+  margin-left: var(--space-sm);
+  color: var(--color-text-subtle);
+}
+
+.offerTags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm) var(--space-md);
+}
+
+.gap {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-subtle);
+}
+
+.findings {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.findings li {
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--tone);
+  background: var(--tone-soft);
+  font-size: var(--font-size-small);
+  color: var(--color-text);
+}
+
+.findings li[data-tone="good"] {
+  --tone: var(--color-good);
+  --tone-soft: var(--color-good-soft);
+}
+
+.findings li[data-tone="warn"] {
+  --tone: var(--color-warn);
+  --tone-soft: var(--color-warn-soft);
+}
+
+.findings li[data-tone="danger"] {
+  --tone: var(--color-danger);
+  --tone-soft: var(--color-danger-soft);
+}
+
+.findings li[data-tone="neutral"] {
+  --tone: var(--color-border-strong);
+  --tone-soft: var(--color-bg-sunken);
+}
+
+.note {
+  font-size: var(--font-size-small);
+  color: var(--color-text-subtle);
+}
+
+@media (max-width: 899px) {
+  .head {
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  .headText h1 {
+    font-size: var(--font-size-heading);
+  }
+
+  .bestPrice {
+    font-size: var(--font-size-display);
+  }
+
+  .offer {
+    padding: var(--space-lg);
+    gap: var(--space-md);
+  }
+
+  .offerTop {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .offerPrice {
+    text-align: left;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.contribute {
+  padding: 8px 16px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-small);
+  font-weight: 600;
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+
+.contribute:hover {
+  border-color: var(--color-accent);
+}

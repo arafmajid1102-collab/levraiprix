@@ -1,0 +1,218 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  width: 100%;
+  max-width: 440px;
+  padding: var(--space-xxl);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: var(--font-size-small);
+  font-weight: 600;
+}
+
+.field small {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-subtle);
+}
+
+.input {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--color-bg-sunken);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-body-large);
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+
+.input:focus {
+  outline: 0;
+  border-color: var(--color-accent);
+}
+
+.input[aria-invalid="true"] {
+  border-color: var(--color-danger);
+}
+
+.code {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: var(--font-size-heading);
+  letter-spacing: 0.3em;
+  text-align: center;
+}
+
+.methods {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xs);
+  padding: var(--space-xs);
+  background: var(--color-bg-sunken);
+  border-radius: var(--radius-pill);
+}
+
+.methods button {
+  padding: 8px 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  font-size: var(--font-size-small);
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.methods button[aria-checked="true"] {
+  background: var(--color-surface-raised);
+  border-color: var(--color-border-strong);
+  color: var(--color-text);
+}
+
+.submit {
+  width: 100%;
+  padding: 12px 20px;
+}
+
+.submit:disabled,
+.secondary:disabled,
+.danger:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+
+.secondary,
+.danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 18px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border-strong);
+  font-size: var(--font-size-small);
+  font-weight: 600;
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+
+.secondary:hover {
+  border-color: var(--color-text-subtle);
+}
+
+.danger {
+  color: var(--color-danger);
+  border-color: color-mix(in srgb, var(--color-danger) 45%, transparent);
+}
+
+.danger:hover {
+  background: var(--color-danger-soft);
+}
+
+.link {
+  color: var(--color-accent-text);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.message {
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-small);
+}
+
+.message[data-tone="error"] {
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+.message[data-tone="info"] {
+  background: var(--color-info-soft);
+  color: var(--color-info);
+}
+
+.message[data-tone="good"] {
+  background: var(--color-good-soft);
+  color: var(--color-good);
+}
+
+.note {
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm) var(--space-md);
+}
+
+/* ── Bloc « Compte » du profil ── */
+.account {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  padding: var(--space-xl);
+}
+
+.account h2 {
+  font-size: var(--font-size-body-large);
+  margin-bottom: 4px;
+}
+
+.account h3 {
+  font-family: var(--font-text), system-ui, sans-serif;
+  font-size: var(--font-size-small);
+  font-weight: 600;
+  letter-spacing: 0;
+  margin-bottom: 4px;
+}
+
+.account p {
+  max-width: 62ch;
+  font-size: var(--font-size-small);
+}
+
+.item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md) var(--space-lg);
+  padding-top: var(--space-xl);
+  border-top: 1px solid var(--color-border);
+}
+
+.item > form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  width: 100%;
+}
+
+.item > form .input {
+  flex: 1;
+  min-width: 220px;
+  font-size: var(--font-size-body);
+  padding: 9px 14px;
+}
+
+.item > .message {
+  width: 100%;
+}
+
+@media (max-width: 899px) {
+  .panel {
+    padding: var(--space-xl);
+  }
+}
