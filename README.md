@@ -100,6 +100,18 @@ Tout utilisateur connecté peut ajouter un prix vu en magasin (`/contribuer` sur
   - Les photos sont supprimées avec le compte.
 - Après ajout d'un module natif (caméra, photos), l'application mobile doit être reconstruite : Expo Go ne suffit plus forcément.
 
+## Fiche produit proposée au scan
+
+Quand un code-barres est inconnu du catalogue, le formulaire d'ajout se préremplit
+(nom, marque, contenance) à partir de deux bases ouvertes : Open Products Facts
+(non alimentaire) puis Open Food Facts. Code : `packages/data-supabase/src/openfacts.ts`.
+
+- Ce sont des propositions à vérifier sur l'emballage : la source est citée à l'écran
+  (licence ODbL), et une saisie de l'utilisateur n'est jamais écrasée.
+- Un appel par scan ou par clic sur « Préremplir » : jamais de parcours automatique de ces bases.
+- Aucun prix n'est lu ici. Les codes internes aux magasins (EAN-13 commençant par 2) sont ignorés.
+- Sur le web, l'appel part du serveur ; sur mobile, il part du téléphone (seul le code-barres est transmis).
+
 ## Essayer sur un vrai téléphone
 
 1. Installer **Expo Go** sur le téléphone (App Store ou Google Play).

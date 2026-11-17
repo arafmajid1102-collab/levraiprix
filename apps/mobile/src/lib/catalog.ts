@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react';
  */
 let now = new Date();
 const config = readSupabaseConfig(
-  process.env.EXPO_PUBLIC_SUPABASE_URL,
+  process.env.EXPO_PUBLIC_SUPABASE_LAN_URL || process.env.EXPO_PUBLIC_SUPABASE_URL,
   process.env.EXPO_PUBLIC_SUPABASE_KEY,
 );
 const publicClient = config ? createPublicClient(config) : null;

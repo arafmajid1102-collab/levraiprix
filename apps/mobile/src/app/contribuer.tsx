@@ -23,10 +23,13 @@ import {
   type ProofKind,
   type StoreDraft,
   type Submission,
+  applySuggestion,
+  lookupOpenFacts,
+  type ProductSuggestion,
 } from '@lvp/data-supabase';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Image, Pressable, View } from 'react-native';
+import { Image, Linking, Pressable, View } from 'react-native';
 
 import { useAccount } from '@/lib/account';
 import { refreshCatalog, useCatalog } from '@/lib/catalog';
@@ -138,6 +141,9 @@ export default function ContributeScreen() {
   const [product, setProduct] = useState<ContributableProduct | null>(null);
   const [creatingProduct, setCreatingProduct] = useState(scanned !== '');
   const [productDraft, setProductDraft] = useState<ProductDraft>({ ...emptyProduct, barcode: scanned });
+  // Fiche proposée par une base ouverte pour le code-barres : une aide à la saisie, jamais une donnée validée.
+  const [suggestion, setSuggestion] = useState<ProductSuggestion | null>(null);
+  const [lookup, setLookup] = useState<'idle' | 'busy' | 'none'>(scanned ? 'busy' : 'idle');
 
   const [stores, setStores] = useState<ContributableStore[] | null>(null);
   const [storeId, setStoreId] = useState('');
@@ -154,6 +160,31 @@ export default function ContributeScreen() {
 
   const client = account.status === 'signedIn' ? account.client : null;
   const userId = account.status === 'signedIn' ? account.userId : null;
+
+  const showSuggestion = (found: ProductSuggestion | null) => {
+    if (found) setProductDraft((draft) => applySuggestion(draft, found));
+    setSuggestion(found);
+    setLookup(found ? 'idle' : 'none');
+  };
+  // L'appel part du téléphone vers les bases ouvertes : seul le code-barres est transmis.
+  const findSuggestion = (barcode: string) => lookupOpenFacts(barcode, { userAgent: 'LeVraiPrix/0.1 (mobile)' });
+
+  function lookUpBarcode(barcode: string) {
+    setLookup('busy');
+    setSuggestion(null);
+    void findSuggestion(barcode).then(showSuggestion);
+  }
+
+  // Arrivée depuis le scanner : une seule recherche, pour ce scan.
+  const signedIn = account.status === 'signedIn';
+  useEffect(() => {
+    if (!scanned || !signedIn) return;
+    let cancelled = false;
+    void findSuggestion(scanned).then((found) => !cancelled && showSuggestion(found));
+    return () => {
+      cancelled = true;
+    };
+  }, [scanned, signedIn]);
 
   useEffect(() => {
     if (!client) return;
@@ -358,6 +389,27 @@ export default function ContributeScreen() {
               options={categories.map((c) => [c.id, c.name] as const)}
             />
             <Field label="Code-barres (facultatif)" value={productDraft.barcode} onChangeText={(barcode) => setP({ barcode })} keyboardType="number-pad" maxLength={18} />
+            {/^\d{8,14}$/.test(productDraft.barcode.trim()) ? (
+              <ActionButton
+                kind="secondary"
+                label={lookup === 'busy' ? 'Recherche…' : 'Préremplir à partir du code-barres'}
+                onPress={() => lookUpBarcode(productDraft.barcode.trim())}
+                disabled={busy || lookup === 'busy'}
+              />
+            ) : null}
+            {suggestion ? (
+              <Text variant="small" tone="textMuted">
+                Champs préremplis d’après{' '}
+                <Text variant="small" tone="accentText" accessibilityRole="link" onPress={() => void Linking.openURL(suggestion.url)}>
+                  {suggestion.sourceLabel}
+                </Text>
+                , une base ouverte tenue par des bénévoles (licence ODbL). Vérifiez-les sur l’emballage avant d’envoyer.
+              </Text>
+            ) : lookup === 'none' ? (
+              <Text variant="small" tone="textMuted">
+                Ce code-barres est inconnu des bases ouvertes : remplissez la fiche à la main.
+              </Text>
+            ) : null}
             <Field label="Contenance" placeholder="1,5" value={productDraft.amount} onChangeText={(amount) => setP({ amount })} keyboardType="decimal-pad" />
             <Choice<ContentUnit>
               label="Unité"

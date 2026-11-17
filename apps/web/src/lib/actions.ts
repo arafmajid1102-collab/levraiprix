@@ -2,6 +2,7 @@
 
 import { updateTag } from "next/cache";
 import type { ProductView } from "@lvp/core";
+import { lookupOpenFacts, type ProductSuggestion } from "@lvp/data-supabase";
 import { CATALOG_TAG, getCatalogSnapshot } from "./catalog";
 
 /**
@@ -28,4 +29,14 @@ export async function findProductIdByBarcode(barcode: string): Promise<string | 
   if (typeof barcode !== "string" || !/^\d{8,14}$/.test(barcode)) return null;
   const { products } = await getCatalogSnapshot();
   return products.find((product) => product.barcode === barcode)?.id ?? null;
+}
+
+/**
+ * Fiche proposée pour un code-barres, lue dans les bases ouvertes Open Products
+ * Facts / Open Food Facts. L'appel part du serveur : l'adresse de l'utilisateur
+ * n'est pas transmise à ces services. Un appel par demande de l'utilisateur.
+ */
+export async function suggestProduct(barcode: string): Promise<ProductSuggestion | null> {
+  if (typeof barcode !== "string" || !/^\d{8,14}$/.test(barcode)) return null;
+  return lookupOpenFacts(barcode, { userAgent: "LeVraiPrix/0.1 (web)" });
 }

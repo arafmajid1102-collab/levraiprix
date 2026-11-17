@@ -21,6 +21,7 @@ import {
 export * from "./auth";
 export * from "./contributions";
 export * from "./personal";
+export * from "./openfacts";
 export * from "./rows";
 
 export interface SupabaseConfig {

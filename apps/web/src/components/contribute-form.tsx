@@ -22,12 +22,14 @@ import {
   type ProductDraft,
   type ProofKind,
   type StoreDraft,
+  applySuggestion,
+  type ProductSuggestion,
 } from "@lvp/data-supabase";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, type FormEvent } from "react";
 import { useAccount } from "@/lib/account";
-import { refreshCatalog } from "@/lib/actions";
+import { refreshCatalog, suggestProduct } from "@/lib/actions";
 import { prepareProofPhoto } from "@/lib/photo";
 import auth from "./auth.module.css";
 import styles from "./contribute.module.css";
@@ -73,6 +75,9 @@ export function ContributeForm({ categories }: { categories: CategoryOption[] })
   const [product, setProduct] = useState<ContributableProduct | null>(null);
   const [creatingProduct, setCreatingProduct] = useState(scanned !== "");
   const [productDraft, setProductDraft] = useState<ProductDraft>({ ...emptyProduct, barcode: scanned });
+  // Fiche proposée par une base ouverte pour le code-barres : une aide à la saisie, jamais une donnée validée.
+  const [suggestion, setSuggestion] = useState<ProductSuggestion | null>(null);
+  const [lookup, setLookup] = useState<"idle" | "busy" | "none">(scanned ? "busy" : "idle");
 
   const [stores, setStores] = useState<ContributableStore[] | null>(null);
   const [storeId, setStoreId] = useState("");
@@ -105,6 +110,31 @@ export function ContributeForm({ categories }: { categories: CategoryOption[] })
       cancelled = true;
     };
   }, [client, preselected]);
+
+  const showSuggestion = (found: ProductSuggestion | null) => {
+    if (found) setProductDraft((draft) => applySuggestion(draft, found));
+    setSuggestion(found);
+    setLookup(found ? "idle" : "none");
+  };
+
+  function lookUpBarcode(code: string) {
+    setLookup("busy");
+    setSuggestion(null);
+    return suggestProduct(code).catch(() => null).then(showSuggestion);
+  }
+
+  // Arrivée depuis le scanner : une seule recherche, pour ce scan.
+  const signedIn = account.status === "signedIn";
+  useEffect(() => {
+    if (!scanned || !signedIn) return;
+    let cancelled = false;
+    suggestProduct(scanned)
+      .catch(() => null)
+      .then((found) => !cancelled && showSuggestion(found));
+    return () => {
+      cancelled = true;
+    };
+  }, [scanned, signedIn]);
 
   if (account.status === "unavailable") {
     return <p className={ui.empty}>La contribution n&apos;est pas disponible en mode démonstration : aucune base de données n&apos;est connectée.</p>;
@@ -280,6 +310,26 @@ export function ContributeForm({ categories }: { categories: CategoryOption[] })
                   <input id="p-barcode" className={auth.input} value={productDraft.barcode} onChange={(e) => setP({ barcode: e.target.value })} inputMode="numeric" maxLength={18} />
                 </div>
               </div>
+              {/^\d{8,14}$/.test(productDraft.barcode.trim()) ? (
+                <div className={auth.row}>
+                  <button type="button" className={auth.secondary} onClick={() => lookUpBarcode(productDraft.barcode.trim())} disabled={busy || lookup === "busy"}>
+                    {lookup === "busy" ? "Recherche…" : "Préremplir à partir du code-barres"}
+                  </button>
+                </div>
+              ) : null}
+              {suggestion ? (
+                <p className={auth.note} role="status">
+                  Champs préremplis d&apos;après{" "}
+                  <a href={suggestion.url} target="_blank" rel="noreferrer">
+                    {suggestion.sourceLabel}
+                  </a>
+                  , une base ouverte tenue par des bénévoles (licence ODbL). Vérifiez-les sur l&apos;emballage avant d&apos;envoyer.
+                </p>
+              ) : lookup === "none" ? (
+                <p className={auth.note} role="status">
+                  Ce code-barres est inconnu des bases ouvertes : remplissez la fiche à la main.
+                </p>
+              ) : null}
               <div className={styles.grid}>
                 <div className={auth.field}>
                   <label htmlFor="p-amount">Contenance</label>

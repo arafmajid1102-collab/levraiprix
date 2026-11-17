@@ -13,5 +13,6 @@ if ! curl -s -m 5 -o /dev/null -H "apikey: $KEY" "http://$IP:54321/auth/v1/healt
   exit 1
 fi
 echo "Base locale : http://$IP:54321 — le téléphone doit être sur le même Wi-Fi que ce Mac."
-# Une variable déjà définie l'emporte sur .env.local ; --clear évite une ancienne adresse en cache.
-EXPO_PUBLIC_SUPABASE_URL="http://$IP:54321" exec pnpm exec expo start --lan --clear
+# Variable distincte de celle de .env.local : en développement, Expo relit ce
+# fichier et son 127.0.0.1 l'emporterait sur une variable du même nom.
+EXPO_PUBLIC_SUPABASE_LAN_URL="http://$IP:54321" exec pnpm exec expo start --lan --clear

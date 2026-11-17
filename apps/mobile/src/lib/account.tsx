@@ -46,7 +46,7 @@ const secureStorage: SessionStorage = {
 };
 
 // Seules l'URL et la clé PUBLIQUE arrivent ici ; readSupabaseConfig refuse une clé secrète.
-const config = readSupabaseConfig(process.env.EXPO_PUBLIC_SUPABASE_URL, process.env.EXPO_PUBLIC_SUPABASE_KEY);
+const config = readSupabaseConfig(process.env.EXPO_PUBLIC_SUPABASE_LAN_URL || process.env.EXPO_PUBLIC_SUPABASE_URL, process.env.EXPO_PUBLIC_SUPABASE_KEY);
 
 let sharedClient: Client | null = null;
 // Sur le web (aperçu Expo), le trousseau n'existe pas : supabase-js utilise localStorage.
